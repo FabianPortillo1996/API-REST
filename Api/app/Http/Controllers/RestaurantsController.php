@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Storage;
 
 class RestaurantsController extends ApiController
 {
+
     /**
      * Display a listing of the resource.
      *
@@ -30,7 +31,7 @@ class RestaurantsController extends ApiController
     public function store(Request $request)
     {
         $data = $request->all();
-        $data['url_image'] = $request->file('url_image')->store('public/images');
+        $data['url_image'] = $request->file('url_image')->store('public');
         $restaurant = Restaurants::create($data);
         return $this->showOne($restaurant,201);
     }
@@ -65,9 +66,8 @@ class RestaurantsController extends ApiController
         }
         if($request->has('url_image')){
             Storage::delete($restaurant->url_image);
-            $restaurant->url_image = $request->url_image->store('public/images');
+            $restaurant->url_image = $request->url_image->store('public');
         }
-
         if(!$restaurant->isDirty()){
             return $this->errorResponse('Se debe especificar un valor diferente en algun campo para actualizar',422);
         }

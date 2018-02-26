@@ -4,6 +4,7 @@ namespace App\Exceptions;
 
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Auth\AuthenticationException;
 use App\Traits\ApiResponser;
@@ -61,6 +62,9 @@ class Handler extends ExceptionHandler
         }
         if($exception instanceof ModelNotFoundException){
             return $this->errorResponse("El dato no existe con el id especificado",404);
+        }
+        if($exception instanceof QueryException){
+            return $this->errorResponse("El email esta en uso",400);
         }
         return parent::render($request, $exception);
     }

@@ -27,7 +27,6 @@ class UserController extends ApiController
      */
     public function store(Request $request)
     {
-
         $data = $request->all();
         $data['password'] = bcrypt($request->password);
         $user = User::create($data);
