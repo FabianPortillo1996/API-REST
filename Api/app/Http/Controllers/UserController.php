@@ -27,6 +27,9 @@ class UserController extends ApiController
      */
     public function store(Request $request)
     {
+        $rules = ["name" => "required", "email" => "required|email","password"=>"required"];
+        $this->validate($request,$rules);
+
         $data = $request->all();
         $data['password'] = bcrypt($request->password);
         $user = User::create($data);
@@ -54,6 +57,8 @@ class UserController extends ApiController
      */
     public function update(Request $request, $id)
     {
+        $rules = ["name" => "required", "email" => "required|email"];
+        $this->validate($request,$rules);
         $user = User::findOrFail($id);
         if ($request->has('name')) {
             $user->name = $request->name;

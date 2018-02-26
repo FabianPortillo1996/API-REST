@@ -30,6 +30,8 @@ class RestaurantsController extends ApiController
      */
     public function store(Request $request)
     {
+        $rules = ["name" => "required", "description" => "required" , "url_image" => "required"];
+        $this->validate($request,$rules);
         $data = $request->all();
         $data['url_image'] = $request->file('url_image')->store('public');
         $restaurant = Restaurants::create($data);
@@ -57,6 +59,9 @@ class RestaurantsController extends ApiController
      */
     public function update(Request $request, $id)
     {
+        $rules = ["name" => "required", "description" => "required" , "url_image" => "required"];
+        $this->validate($request,$rules);
+
         $restaurant = Restaurants::findOrfail($id);
         if($request->has('name')){
             $restaurant->name = $request->name;

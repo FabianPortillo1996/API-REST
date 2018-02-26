@@ -3,12 +3,13 @@
 namespace App\Exceptions;
 
 use Exception;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Database\QueryException;
-use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use Illuminate\Auth\AuthenticationException;
 use App\Traits\ApiResponser;
+use Illuminate\Database\QueryException;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+//use App\Traits\ApiResponser;
 
 class Handler extends ExceptionHandler
 {
@@ -58,7 +59,7 @@ class Handler extends ExceptionHandler
             return $this->convertValidationExceptionToResponse($exception,$request);
         }
         if($exception instanceof AuthenticationException){
-            return $this->unauthenticated($request,$exception);
+            return $this->errorResponse("Datos incorrectos",401);
         }
         if($exception instanceof ModelNotFoundException){
             return $this->errorResponse("El dato no existe con el id especificado",404);
@@ -78,8 +79,8 @@ class Handler extends ExceptionHandler
      */
     protected function convertValidationExceptionToResponse(ValidationException $e, $request)
     {
-        $errors = $e->validator->errors()->getMessage();
-        return response()->errorResponse($errors,422);
+        $errors = $e->validator->errors()->getMessageBag();
+        return $this->errorResponse($errors,422);
     }
     
 }
